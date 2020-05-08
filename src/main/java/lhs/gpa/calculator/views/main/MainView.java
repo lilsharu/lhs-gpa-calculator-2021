@@ -1,27 +1,23 @@
 package lhs.gpa.calculator.views.main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;import com.vaadin.flow.theme.lumo.Lumo;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
+import lhs.gpa.calculator.views.calculator.GpaCalculator;
 
-import lhs.gpa.calculator.views.main.MainView;
-import lhs.gpa.calculator.views.form.FormView;
-import lhs.gpa.calculator.views.dashboard.DashboardView;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -51,9 +47,9 @@ public class MainView extends AppLayout {
 
     private static Tab[] getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab("Form", FormView.class));
-        tabs.add(createTab("Dashboard", DashboardView.class));
-        return tabs.toArray(new Tab[tabs.size()]);
+        tabs.add(createTab("GPA Calculator", GpaCalculator.class));
+//        tabs.add(createTab("Dashboard", DashboardView.class));
+        return tabs.toArray(new Tab[0]);
     }
 
     private static Tab createTab(String title, Class<? extends Component> viewClass) {
@@ -80,6 +76,7 @@ public class MainView extends AppLayout {
     private void selectTab() {
         String target = RouteConfiguration.forSessionScope().getUrl(getContent().getClass());
         Optional<Component> tabToSelect = menu.getChildren().filter(tab -> {
+            //noinspection OptionalGetWithoutIsPresent
             Component child = tab.getChildren().findFirst().get();
             return child instanceof RouterLink && ((RouterLink) child).getHref().equals(target);
         }).findFirst();

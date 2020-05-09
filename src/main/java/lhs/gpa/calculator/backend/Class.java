@@ -14,7 +14,6 @@ public class Class {
     public static final String FULL_YEAR = "Full Year";
     public static final String HALF_YEAR = "Half Year";
     
-    
     public Class(String name, double credits, Level level, Department department, int classNumber) {
         this.name        = name;
         this.credits     = round(credits);
@@ -32,6 +31,16 @@ public class Class {
         this.length      = length;
         this.classNumber = classNumber;
         this.core        = department.isCore() || level.equals(Level.AP);
+    }
+    
+    public Class(Class aClass) {
+        this.name        = aClass.getName();
+        this.credits     = round(aClass.getCredits());
+        this.level       = aClass.getLevel();
+        this.department  = aClass.getDepartment();
+        this.length      = aClass.getLength();
+        this.classNumber = aClass.getClassNumber();
+        this.core        = aClass.isCore();
     }
     
     public String getName() {
@@ -85,11 +94,25 @@ public class Class {
     public int getClassNumber() {
         return classNumber;
     }
-
+    
     public void setClassNumber(int classNumber) {
         this.classNumber = classNumber;
     }
-
+    
+    public Class getaClass() {
+        return this;
+    }
+    
+    public void setClass(Class aClass) {
+        this.name        = aClass.getName();
+        this.credits     = round(aClass.getCredits());
+        this.level       = aClass.getLevel();
+        this.department  = aClass.getDepartment();
+        this.length      = aClass.getLength();
+        this.classNumber = aClass.getClassNumber();
+        this.core        = aClass.isCore();
+    }
+    
     /* Other Useful Methods */
     public static double round(double in) {
         in *= 10;

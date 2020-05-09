@@ -1,5 +1,7 @@
 package lhs.gpa.calculator.backend;
 
+import java.math.BigDecimal;
+
 public class Course extends Class {
     private Grade grade;
     
@@ -19,5 +21,9 @@ public class Course extends Class {
     
     public void setGrade(Grade grade) {
         this.grade = grade;
+    }
+    
+    public BigDecimal getGPA() {
+        return GPA.getGPA(grade, getLevel()).calculateGPA();
     }
 }

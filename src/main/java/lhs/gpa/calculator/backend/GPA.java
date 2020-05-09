@@ -23,7 +23,7 @@ public class GPA {
         this.level = level;
     }
     
-    public static GPA GPA(Grade grade, Level level) {
+    public static GPA getGPA(Grade grade, Level level) {
         return new GPA(grade, level);
     }
     

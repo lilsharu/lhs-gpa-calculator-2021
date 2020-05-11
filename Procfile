@@ -1,1 +1,1 @@
-web: java -jar "target/Grade Tracker 1.0-SNAPSHOT.jar" $PORT
+web: java -jar "target/lhs-gpa-calculator-final.jar" $PORT

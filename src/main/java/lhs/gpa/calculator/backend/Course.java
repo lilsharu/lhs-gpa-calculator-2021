@@ -56,6 +56,10 @@ public class Course extends Class {
         return GPA.getGPA(grade, getLevel()).calculateGPA();
     }
     
+    public BigDecimal getMaxGPA() {
+        return GPA.getGPA(Grade.A, getLevel()).calculateGPA();
+    }
+    
     @Override
     public String toString() {
         return super.toString() + " Grade = " + grade + " Credits = " + super.getCredits();

@@ -129,26 +129,29 @@ public class GenericGPACalculator extends VerticalLayout {
             //Create the Notification For GPA
             Notification gpaNotify = new Notification();
             gpaNotify.setPosition(Notification.Position.MIDDLE);
-            
+    
             VerticalLayout GPAInfo = new VerticalLayout();
-            
+    
             CourseList courseList = new CourseList(this.courseList);
             GPAValue   gpaAll     = courseList.getAllCourseGPA();
+            GPAValue   gpaAllMax  = courseList.getMaxAllCourseGPA();
             GPAValue   gpaCore    = courseList.getCoreGPA();
+            GPAValue   gpaCoreMax = courseList.getMaxCoreGPA();
             GPAValue   gpaUW      = courseList.getUnweightedGPA();
-            
-            GPAInfo.add(new H2("Calculated GPA"));
+            GPAValue   gpaUWMax   = courseList.getMaxUnweightedGPA();
+    
+            GPAInfo.add(new H2("Calculated GPA: Current/Max"));
             VerticalLayout gpaLevels = new VerticalLayout(
                     new Html("<p style='font-size:150%'><strong>Weighted All Course GPA: </strong></p>"),
                     new Html("<p style='font-size:150%'><strong>Weighted Core GPA: </strong></p>"),
                     new Html("<p style='font-size:150%'><strong>Unweighted GPA: </strong></p>")
             );
             gpaLevels.setWidth("23em");
-            
+    
             VerticalLayout gpa = new VerticalLayout(
-                    new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaAll.toString())),
-                    new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaCore.toString())),
-                    new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaUW.toString()))
+                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaAll.toString(), gpaAllMax.toString())),
+                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaCore.toString(), gpaCoreMax.toString())),
+                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaUW.toString(), gpaUWMax.toString()))
             );
             gpa.setWidth("25%");
             

@@ -30,6 +30,23 @@ public class CourseList {
                 gpaSum  = gpaSum.add(credit.multiply(c.getGPA()));
             }
         }
+    
+        return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
+                                    .divide(credits, RoundingMode.HALF_UP)
+                                    .divide(BigDecimal.valueOf(100)));
+    }
+    
+    public GPAValue getMaxAllCourseGPA() {
+        BigDecimal credits = new BigDecimal(0);
+        BigDecimal gpaSum  = new BigDecimal(0);
+        
+        for (Course c : courseList) {
+            if (c.isReal()) {
+                BigDecimal credit = BigDecimal.valueOf(c.getCredits());
+                credits = credits.add(credit);
+                gpaSum  = gpaSum.add(credit.multiply(c.getMaxGPA()));
+            }
+        }
         
         return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
                                     .divide(credits, RoundingMode.HALF_UP)
@@ -58,6 +75,28 @@ public class CourseList {
         }
     }
     
+    public GPAValue getMaxCoreGPA() {
+        List<Course> courseList = (List<Course>) ((ArrayList<Course>) this.courseList).clone();
+        BigDecimal   credits    = new BigDecimal(0);
+        BigDecimal   gpaSum     = new BigDecimal(0);
+        
+        for (Course c : courseList) {
+            if (c.isReal() && c.isCore()) {
+                BigDecimal credit = BigDecimal.valueOf(c.getCredits());
+                credits = credits.add(credit);
+                gpaSum  = gpaSum.add(credit.multiply(c.getMaxGPA()));
+            }
+        }
+        
+        try {
+            return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
+                                        .divide(credits, RoundingMode.HALF_UP)
+                                        .divide(BigDecimal.valueOf(100)));
+        } catch (ArithmeticException e) {
+            return new GPAValue(0);
+        }
+    }
+    
     public GPAValue getUnweightedGPA() {
         BigDecimal credits = new BigDecimal(0);
         BigDecimal gpaSum  = new BigDecimal(0);
@@ -73,5 +112,9 @@ public class CourseList {
         return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
                                     .divide(credits, RoundingMode.HALF_UP)
                                     .divide(BigDecimal.valueOf(100)));
+    }
+    
+    public GPAValue getMaxUnweightedGPA() {
+        return new GPAValue(new BigDecimal("4.00"));
     }
 }

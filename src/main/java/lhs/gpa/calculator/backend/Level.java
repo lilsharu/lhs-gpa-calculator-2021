@@ -33,7 +33,7 @@ public class Level {
         } else return new BigDecimal("0.00");
     }
     
-    public static Level getLevel(String level) {
+    public static Level parseLevel(String level) {
         level = level.toUpperCase();
         switch (level) {
             case "HONORS":

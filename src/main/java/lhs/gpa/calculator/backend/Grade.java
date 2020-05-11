@@ -1,6 +1,7 @@
 package lhs.gpa.calculator.backend;
 
 import java.math.BigDecimal;
+import java.util.*;
 
 public class Grade {
     private String grade;
@@ -65,5 +66,18 @@ public class Grade {
         Grade grade1 = (Grade) o;
         
         return getGrade().equals(grade1.getGrade());
+    }
+    
+    @Override
+    public String toString() {
+        return grade;
+    }
+    
+    public static List<Grade> gradeList() {
+        return new ArrayList<>(Arrays.asList(A, A_MINUS,
+                                             B_PLUS, B, B_MINUS,
+                                             C_PLUS, C, C_MINUS,
+                                             D_PLUS, D, D_MINUS,
+                                             F));
     }
 }

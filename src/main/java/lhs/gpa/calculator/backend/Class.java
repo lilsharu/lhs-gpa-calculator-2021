@@ -14,6 +14,10 @@ public class Class {
     public static final String FULL_YEAR = "Full Year";
     public static final String HALF_YEAR = "Half Year";
     
+    public Class() {
+    
+    }
+    
     public Class(String name, double credits, Level level, Department department, int classNumber) {
         this.name        = name;
         this.credits     = round(credits);
@@ -65,6 +69,7 @@ public class Class {
     
     public void setLevel(Level level) {
         this.level = level;
+        setCore((department != null && department.isCore()) || (level != null && level.equals(Level.AP)));
     }
     
     public Department getDepartment() {
@@ -73,6 +78,7 @@ public class Class {
     
     public void setDepartment(Department department) {
         this.department = department;
+        setCore((department != null && department.isCore()) || (level != null && level.equals(Level.AP)));
     }
     
     public boolean isCore() {
@@ -119,5 +125,10 @@ public class Class {
         in += 0.5;
         double out = (int) in;
         return out / 10;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s (%d) %s", name, classNumber, level.toString());
     }
 }

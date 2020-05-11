@@ -10,20 +10,17 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import lhs.gpa.calculator.views.calculator.GpaCalculator;
+import lhs.gpa.calculator.views.calculator.GenericGPACalculator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The main view is a top-level placeholder for other views.
  */
 @JsModule("./styles/shared-styles.js")
-@PWA(name = "Grade Tracker", shortName = "Grade Tracker")
+//@PWA(name = "Grade Tracker", shortName = "Grade Tracker")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class MainView extends AppLayout {
 
@@ -47,7 +44,7 @@ public class MainView extends AppLayout {
 
     private static Tab[] getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab("GPA Calculator", GpaCalculator.class));
+        tabs.add(createTab("Generic GPA Calculator", GenericGPACalculator.class));
 //        tabs.add(createTab("Dashboard", DashboardView.class));
         return tabs.toArray(new Tab[0]);
     }

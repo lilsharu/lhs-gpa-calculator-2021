@@ -1,5 +1,7 @@
 package lhs.gpa.calculator.backend;
 
+import java.util.*;
+
 public class Department {
     /* Class Departments */
     public static final Department BUSINESS_DEPARTMENT        = new Department("Business");
@@ -13,6 +15,7 @@ public class Department {
     public static final Department TECHNOLOGY_DEPARTMENT      = new Department("Technology, Design, and Engineering");
     public static final Department VISUAL_ART_DEPARTMENT      = new Department("Visual Arts");
     public static final Department WORLD_LANGUAGE_DEPARTMENT  = new Department("World Language");
+    
     private final       String     department;
     
     public Department(String department) {
@@ -32,13 +35,34 @@ public class Department {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        
+    
         Department that = (Department) o;
-        
+    
         return getDepartment().equals(that.getDepartment());
     }
     
     public String getDepartment() {
         return department;
+    }
+    
+    @Override
+    public String toString() {
+        return department;
+    }
+    
+    public static List<Department> getDepartments() {
+        return new ArrayList<>(Arrays.asList(
+                BUSINESS_DEPARTMENT,
+                ENGLISH_DEPARTMENT,
+                FCS_DEPARTMENT,
+                MATH_DEPARTMENT,
+                PE_DEPARTMENT,
+                PERFORMING_ARTS_DEPARTMENT,
+                SCIENCE_DEPARTMENT,
+                SOCIAL_STUDIES_DEPARTMENT,
+                TECHNOLOGY_DEPARTMENT,
+                VISUAL_ART_DEPARTMENT,
+                WORLD_LANGUAGE_DEPARTMENT
+        ));
     }
 }

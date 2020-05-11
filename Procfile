@@ -1,1 +1,1 @@
-web: java -jar "target/lhs-gpa-calculator-final.jar" $PORT
+web: java -jar target/lhs-gpa-calculator-final.jar $PORT

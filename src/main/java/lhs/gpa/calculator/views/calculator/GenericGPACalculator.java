@@ -13,10 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
@@ -24,10 +21,6 @@ import lhs.gpa.calculator.views.main.MainView;
 import java.util.*;
 
 @Route(value = "generic-calculator", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
-@PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
-     description = "Helps in the management of LHS Courses and helps calculate GPA")
-@PreserveOnRefresh
 @UIScope
 @PageTitle("Generic GPA Calculator | GPA Genie")
 public class GenericGPACalculator extends VerticalLayout {

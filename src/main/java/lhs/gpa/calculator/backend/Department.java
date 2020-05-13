@@ -73,7 +73,7 @@ public class Department {
             case "WORLD_LANGUAGE_DEPARTMENT":
                 return WORLD_LANGUAGE_DEPARTMENT;
             default:
-                throw new IllegalArgumentException("That does not match any of the known departments");
+                throw new IllegalArgumentException(department + " does not match any of the known departments");
         }
     }
     

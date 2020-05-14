@@ -8,11 +8,7 @@ import java.util.*;
 
 public class ClassList {
     
-    private final List<Class> classList;
-    
-    private ClassList(List<Class> classList) {
-        this.classList = classList;
-    }
+    private static List<Class> classList;
     
     public static List<Class> getClassList(InputStream classFileData) {
         try {
@@ -35,9 +31,26 @@ public class ClassList {
     
             classList.sort(Comparator.comparing(Class::getName));
     
+            ClassList.classList = classList;
+    
             return classList;
         } catch (IOException ioe) {
             throw new IllegalArgumentException("The Class File that was included contains errors");
         }
+    }
+    
+    public static List<Class> getClassList(InputStream classFileData, Department department) {
+        ArrayList<Class> classListIn = (ArrayList<Class>) getClassList(classFileData);
+        List<Class>      classList   = (List<Class>) classListIn.clone();
+        classList.removeIf(c -> !c.getDepartment().equals(department));
+        
+        return classList;
+    }
+    
+    public static List<Class> getClassList(List<Class> classListIn, Department department) {
+        List<Class> classList = (List<Class>) ((ArrayList<Class>) classListIn).clone();
+        classList.removeIf(c -> !c.getDepartment().equals(department));
+        
+        return classList;
     }
 }

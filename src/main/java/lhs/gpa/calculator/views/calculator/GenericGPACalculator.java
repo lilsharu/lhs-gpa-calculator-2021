@@ -13,10 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
@@ -24,10 +21,6 @@ import lhs.gpa.calculator.views.main.MainView;
 import java.util.*;
 
 @Route(value = "generic-calculator", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
-@PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
-     description = "Helps in the management of LHS Courses and helps calculate GPA")
-@PreserveOnRefresh
 @UIScope
 @PageTitle("Generic GPA Calculator | GPA Genie")
 public class GenericGPACalculator extends VerticalLayout {
@@ -115,23 +108,34 @@ public class GenericGPACalculator extends VerticalLayout {
                 }
                 course.setGrade(change.getValue());
             });
-            
+    
             formLayout.add(courseName, 2);
             formLayout.add(department, 2);
             formLayout.add(levels, 1);
             formLayout.add(credits, 1);
             formLayout.add(gradePicker, 1);
         }
-        
-        Button calculate = new Button("Calculate");
+    
+        Button calculate        = createCalculateButton("Calculate", false);
+        Button calculateWithMax = createCalculateButton("Calculate (With Max)", true);
+    
+        HorizontalLayout buttonBar = new HorizontalLayout(calculate, calculateWithMax);
+    
+        add(formLayout, buttonBar);
+        setJustifyContentMode(JustifyContentMode.CENTER);
+        setWidth("86em");
+    }
+    
+    public Button createCalculateButton(String buttonName, boolean withMax) {
+        Button calculate = new Button(buttonName);
         calculate.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         calculate.addClickListener(buttonClickEvent -> {
             //Create the Notification For GPA
             Notification gpaNotify = new Notification();
             gpaNotify.setPosition(Notification.Position.MIDDLE);
-    
+            
             VerticalLayout GPAInfo = new VerticalLayout();
-    
+            
             CourseList courseList = new CourseList(this.courseList);
             GPAValue   gpaAll     = courseList.getAllCourseGPA();
             GPAValue   gpaAllMax  = courseList.getMaxAllCourseGPA();
@@ -139,21 +143,37 @@ public class GenericGPACalculator extends VerticalLayout {
             GPAValue   gpaCoreMax = courseList.getMaxCoreGPA();
             GPAValue   gpaUW      = courseList.getUnweightedGPA();
             GPAValue   gpaUWMax   = courseList.getMaxUnweightedGPA();
-    
-            GPAInfo.add(new H2("Calculated GPA: Current/Max"));
+            
+            VerticalLayout gpa;
+            
+            if (withMax) {
+                GPAInfo.add(new H2("Calculated GPA: Current/Max"));
+                
+                gpa = new VerticalLayout(
+                        new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaAll.toString(), gpaAllMax.toString())),
+                        new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaCore.toString(), gpaCoreMax.toString())),
+                        new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaUW.toString(), gpaUWMax.toString()))
+                );
+            } else {
+                GPAInfo.add(new H2("Calculated GPA"));
+                
+                gpa = new VerticalLayout(
+                        new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaAll.toString())),
+                        new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaCore.toString())),
+                        new Html(String.format("<p style='font-size:150%%'>%s</p>", gpaUW.toString()))
+                );
+            }
+            
+            gpa.setWidth("25%");
+            
             VerticalLayout gpaLevels = new VerticalLayout(
                     new Html("<p style='font-size:150%'><strong>Weighted All Course GPA: </strong></p>"),
                     new Html("<p style='font-size:150%'><strong>Weighted Core GPA: </strong></p>"),
                     new Html("<p style='font-size:150%'><strong>Unweighted GPA: </strong></p>")
             );
+            
             gpaLevels.setWidth("23em");
-    
-            VerticalLayout gpa = new VerticalLayout(
-                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaAll.toString(), gpaAllMax.toString())),
-                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaCore.toString(), gpaCoreMax.toString())),
-                    new Html(String.format("<p style='font-size:150%%'>%s/%s</p>", gpaUW.toString(), gpaUWMax.toString()))
-            );
-            gpa.setWidth("25%");
+            
             
             HorizontalLayout gpaValues = new HorizontalLayout(gpaLevels, gpa);
             gpaValues.setSpacing(false);
@@ -178,8 +198,6 @@ public class GenericGPACalculator extends VerticalLayout {
             gpaNotify.open();
         });
         
-        add(formLayout, calculate);
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setWidth("86em");
+        return calculate;
     }
 }

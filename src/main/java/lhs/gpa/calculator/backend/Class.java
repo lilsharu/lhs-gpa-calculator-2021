@@ -2,13 +2,13 @@ package lhs.gpa.calculator.backend;
 
 public class Class {
     
-    private String     name;
-    private double     credits;
-    private Level      level;
-    private Department department;
-    private String     length = FULL_YEAR;
-    private int        classNumber;
-    private boolean    core;
+    private String      name;
+    private double      credits;
+    private Level       level;
+    private Department  department;
+    private String      length = FULL_YEAR;
+    private ClassNumber classNumber;
+    private boolean     core;
     
     /* Class Lengths */
     public static final String FULL_YEAR = "Full Year";
@@ -23,7 +23,16 @@ public class Class {
         this.credits     = round(credits);
         this.level       = level;
         this.department  = department;
-        this.classNumber = classNumber;
+        this.classNumber = new ClassNumber(classNumber);
+        this.core        = department.isCore() || level.equals(Level.AP);
+    }
+    
+    public Class(String name, double credits, Level level, Department department, String classNumber) {
+        this.name        = name;
+        this.credits     = round(credits);
+        this.level       = level;
+        this.department  = department;
+        this.classNumber = new ClassNumber(classNumber);
         this.core        = department.isCore() || level.equals(Level.AP);
     }
     
@@ -33,7 +42,17 @@ public class Class {
         this.level       = level;
         this.department  = department;
         this.length      = length;
-        this.classNumber = classNumber;
+        this.classNumber = new ClassNumber(classNumber);
+        this.core        = department.isCore() || level.equals(Level.AP);
+    }
+    
+    public Class(String name, double credits, Level level, Department department, String classNumber, String length) {
+        this.name        = name;
+        this.credits     = round(credits);
+        this.level       = level;
+        this.department  = department;
+        this.length      = length;
+        this.classNumber = new ClassNumber(classNumber);
         this.core        = department.isCore() || level.equals(Level.AP);
     }
     
@@ -97,11 +116,15 @@ public class Class {
         this.length = length;
     }
     
-    public int getClassNumber() {
+    public ClassNumber getClassNumber() {
         return classNumber;
     }
     
     public void setClassNumber(int classNumber) {
+        this.classNumber = new ClassNumber(classNumber);
+    }
+    
+    public void setClassNumber(ClassNumber classNumber) {
         this.classNumber = classNumber;
     }
     
@@ -129,6 +152,6 @@ public class Class {
     
     @Override
     public String toString() {
-        return String.format("%s (%d) %s", name, classNumber, level.toString());
+        return String.format("%s (%s)", name, classNumber.toString());
     }
 }

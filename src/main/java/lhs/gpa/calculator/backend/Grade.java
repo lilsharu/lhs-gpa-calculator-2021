@@ -80,4 +80,43 @@ public class Grade {
                                              D_PLUS, D, D_MINUS,
                                              F));
     }
+    
+    public static Grade averageNoFinals(Grade firstSemesterGrade, Grade secondSemesterGrade) {
+        BigDecimal firstSemester  = firstSemesterGrade.getGPAValue();
+        BigDecimal secondSemester = secondSemesterGrade.getGPAValue();
+        
+        return getGrade((firstSemester.multiply(new BigDecimal("0.50"))).add((secondSemester.multiply(new BigDecimal("0.50")))));
+    }
+    
+    public static Grade averageWithFinals(Grade firstSemesterGrade, Grade finalsGrade) {
+        BigDecimal firstSemester = firstSemesterGrade.getGPAValue();
+        BigDecimal finals        = finalsGrade.getGPAValue();
+        
+        return getGrade((firstSemester.multiply(new BigDecimal("0.90"))).add((finals.multiply(new BigDecimal("0.10")))));
+    }
+    
+    public static Grade averageWithFinals(Grade firstSemesterGrade, Grade secondSemesterGrade, Grade finalsGrade) {
+        BigDecimal firstSemester  = firstSemesterGrade.getGPAValue();
+        BigDecimal secondSemester = secondSemesterGrade.getGPAValue();
+        BigDecimal finals         = finalsGrade.getGPAValue();
+        
+        return getGrade((firstSemester.multiply(new BigDecimal("0.45")).add((secondSemester.multiply(new BigDecimal("0.45"))).add(finals.multiply(new BigDecimal("0.10"))))));
+    }
+    
+    public static Grade getGrade(BigDecimal gpaValue) {
+        double gpa = gpaValue.doubleValue();
+        
+        if (gpa > 3.825) return A;
+        else if (gpa >= 3.495) return A_MINUS;
+        else if (gpa >= 3.155) return B_PLUS;
+        else if (gpa >= 2.825) return B;
+        else if (gpa >= 2.495) return B_MINUS;
+        else if (gpa >= 2.155) return C_PLUS;
+        else if (gpa >= 1.825) return C;
+        else if (gpa >= 1.495) return C_MINUS;
+        else if (gpa >= 1.155) return D_PLUS;
+        else if (gpa >= 0.825) return D;
+        else if (gpa >= 0.495) return D_MINUS;
+        else return F;
+    }
 }

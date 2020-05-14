@@ -8,7 +8,6 @@ public class Course extends Class {
     
     public Course() {
         super();
-        grade = Grade.F;
     }
     
     public Course(boolean real) {
@@ -23,7 +22,6 @@ public class Course extends Class {
     
     public Course(Class aClass) {
         super(aClass);
-        grade = Grade.F;
     }
     
     public Course(String name, double credits, Level level, Department department, int classNumber, Grade grade) {
@@ -44,6 +42,28 @@ public class Course extends Class {
         this.grade = grade;
     }
     
+    public void setGrade(Grade firstSemester, Grade secondSemester, Grade finals) {
+        if (finals == null) {
+            setGradeNoFinals(firstSemester, secondSemester);
+        } else if (secondSemester == null) {
+            setGradeWithFinals(firstSemester, finals);
+        } else {
+            setGradeWithFinals(firstSemester, secondSemester, finals);
+        }
+    }
+    
+    public void setGradeNoFinals(Grade firstSemester, Grade secondSemester) {
+        this.grade = Grade.averageNoFinals(firstSemester, secondSemester);
+    }
+    
+    public void setGradeWithFinals(Grade firstSemester, Grade finals) {
+        this.grade = Grade.averageWithFinals(firstSemester, finals);
+    }
+    
+    public void setGradeWithFinals(Grade firstSemester, Grade secondSemester, Grade finals) {
+        this.grade = Grade.averageWithFinals(firstSemester, secondSemester, finals);
+    }
+    
     public boolean isReal() {
         return real;
     }
@@ -58,10 +78,5 @@ public class Course extends Class {
     
     public BigDecimal getMaxGPA() {
         return GPA.getGPA(Grade.A, getLevel()).calculateGPA();
-    }
-    
-    @Override
-    public String toString() {
-        return super.toString() + " Grade = " + grade + " Credits = " + super.getCredits();
     }
 }

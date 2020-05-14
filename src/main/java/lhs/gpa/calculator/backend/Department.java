@@ -15,8 +15,11 @@ public class Department {
     public static final Department TECHNOLOGY_DEPARTMENT      = new Department("Technology, Design, and Engineering");
     public static final Department VISUAL_ART_DEPARTMENT      = new Department("Visual Arts");
     public static final Department WORLD_LANGUAGE_DEPARTMENT  = new Department("World Language");
+    public static final Department ALL_DEPARTMENTS            = new Department("All");
     
-    private final       String     department;
+    public static final List<Department> DEPARTMENT_LIST = getDepartments();
+    
+    private final String department;
     
     public Department(String department) {
         this.department = department;
@@ -43,6 +46,36 @@ public class Department {
     
     public String getDepartment() {
         return department;
+    }
+    
+    public static Department parseDepartment(String departmentName) {
+        String department = departmentName.toUpperCase();
+        switch (department) {
+            case "BUSINESS_DEPARTMENT":
+                return BUSINESS_DEPARTMENT;
+            case "ENGLISH_DEPARTMENT":
+                return ENGLISH_DEPARTMENT;
+            case "FCS_DEPARTMENT":
+                return FCS_DEPARTMENT;
+            case "MATH_DEPARTMENT":
+                return MATH_DEPARTMENT;
+            case "PE_DEPARTMENT":
+                return PE_DEPARTMENT;
+            case "PERFORMING_ARTS_DEPARTMENT":
+                return PERFORMING_ARTS_DEPARTMENT;
+            case "SCIENCE_DEPARTMENT":
+                return SCIENCE_DEPARTMENT;
+            case "SOCIAL_STUDIES_DEPARTMENT":
+                return SOCIAL_STUDIES_DEPARTMENT;
+            case "TECHNOLOGY_DEPARTMENT":
+                return TECHNOLOGY_DEPARTMENT;
+            case "VISUAL_ART_DEPARTMENT":
+                return VISUAL_ART_DEPARTMENT;
+            case "WORLD_LANGUAGE_DEPARTMENT":
+                return WORLD_LANGUAGE_DEPARTMENT;
+            default:
+                throw new IllegalArgumentException(department + " does not match any of the known departments");
+        }
     }
     
     @Override

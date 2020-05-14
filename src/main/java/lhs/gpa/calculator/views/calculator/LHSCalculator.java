@@ -28,7 +28,6 @@ import java.util.*;
 public class LHSCalculator extends VerticalLayout {
     
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
-    private final List<Department> departments          = Department.getDepartments();
     private final List<Grade>      gradeChoices         = Grade.gradeList();
     private final VerticalLayout   fullYearOption       = new VerticalLayout();
     private final VerticalLayout   singleSemesterOption = new VerticalLayout();
@@ -36,7 +35,6 @@ public class LHSCalculator extends VerticalLayout {
     List<Course> courses = new ArrayList<>(10);
     
     public LHSCalculator() {
-        departments.add(Department.ALL_DEPARTMENTS);
         add(new H2("Single Year Calculator"));
         ComboBox<String> numSelect = new ComboBox<>();
         numSelect.setItems("Single Semester", "Full Year");
@@ -66,9 +64,7 @@ public class LHSCalculator extends VerticalLayout {
                 new ResponsiveStep("0", 1),
                 new ResponsiveStep("32em", 2),
                 new ResponsiveStep("40em", 3),
-                new ResponsiveStep("50em", 4),
-                new ResponsiveStep("60em", 5),
-                new ResponsiveStep("70em", 6)
+                new ResponsiveStep("50em", 4)
         );
     
         for (int i = 0; i < 10; i++) {
@@ -107,15 +103,7 @@ public class LHSCalculator extends VerticalLayout {
                 current.setGrade(grade.getValue());
                 current.setReal(classChoices.getValue() != null);
             });
-        
-            ComboBox<Department> departmentComboBox = new ComboBox<>("Department (For Sorting)", departments);
-            departmentComboBox.setValue(Department.ALL_DEPARTMENTS);
-            departmentComboBox.addValueChangeListener(onChange -> {
-                if (onChange.getValue().equals(Department.ALL_DEPARTMENTS)) classChoices.setItems(classList);
-                else classChoices.setItems(ClassList.getClassList(classList, onChange.getValue()));
-            });
     
-            formLayout.add(departmentComboBox, 2);
             formLayout.add(classChoices, 3);
             formLayout.add(gradeComboBox, 1);
         }
@@ -154,8 +142,7 @@ public class LHSCalculator extends VerticalLayout {
                 new ResponsiveStep("50em", 4),
                 new ResponsiveStep("60em", 5),
                 new ResponsiveStep("70em", 6),
-                new ResponsiveStep("80em", 7),
-                new ResponsiveStep("94em", 8)
+                new ResponsiveStep("80em", 7)
         );
     
         for (int i = 0; i < 10; i++) {
@@ -211,16 +198,8 @@ public class LHSCalculator extends VerticalLayout {
             secondSemester.addValueChangeListener(grade -> current.setGrade(firstSemester.getValue(), grade.getValue(), finalsGrade.getValue()));
         
             finalsGrade.addValueChangeListener(grade -> current.setGrade(firstSemester.getValue(), secondSemester.getValue(), grade.getValue()));
-        
-            ComboBox<Department> departmentComboBox = new ComboBox<>("Department (For Sorting)", departments);
-            departmentComboBox.setValue(Department.ALL_DEPARTMENTS);
-            departmentComboBox.addValueChangeListener(onChange -> {
-                if (onChange.getValue().equals(Department.ALL_DEPARTMENTS)) classChoices.setItems(classList);
-                else classChoices.setItems(ClassList.getClassList(classList, onChange.getValue()));
-            });
-        
-            formLayout.add(departmentComboBox, 2);
-            formLayout.add(classChoices, 3);
+
+            formLayout.add(classChoices, 4);
             formLayout.add(firstSemester, 1);
             formLayout.add(secondSemester, 1);
             formLayout.add(finalsGrade, 1);

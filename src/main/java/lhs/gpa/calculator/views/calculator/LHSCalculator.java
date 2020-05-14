@@ -63,8 +63,7 @@ public class LHSCalculator extends VerticalLayout {
         formLayout.setResponsiveSteps(
                 new ResponsiveStep("0", 1),
                 new ResponsiveStep("32em", 2),
-                new ResponsiveStep("40em", 3),
-                new ResponsiveStep("50em", 4)
+                new ResponsiveStep("40em", 4)
         );
     
         for (int i = 0; i < 10; i++) {
@@ -120,7 +119,8 @@ public class LHSCalculator extends VerticalLayout {
     
         singleSemesterOption.add(formLayout, buttonBar);
         singleSemesterOption.setJustifyContentMode(JustifyContentMode.CENTER);
-        singleSemesterOption.setWidth("86em");
+        singleSemesterOption.setMinWidth("70em");
+        singleSemesterOption.setMaxWidth("100%");
     
         add(singleSemesterOption);
     }
@@ -139,10 +139,10 @@ public class LHSCalculator extends VerticalLayout {
                 new ResponsiveStep("0", 1),
                 new ResponsiveStep("32em", 2),
                 new ResponsiveStep("40em", 3),
-                new ResponsiveStep("50em", 4),
-                new ResponsiveStep("60em", 5),
-                new ResponsiveStep("70em", 6),
-                new ResponsiveStep("80em", 7)
+                new ResponsiveStep("45em", 4),
+                new ResponsiveStep("50em", 5),
+                new ResponsiveStep("55em", 6),
+                new ResponsiveStep("60em", 7)
         );
     
         for (int i = 0; i < 10; i++) {
@@ -217,8 +217,9 @@ public class LHSCalculator extends VerticalLayout {
     
         fullYearOption.add(formLayout, buttonBar);
         fullYearOption.setJustifyContentMode(JustifyContentMode.CENTER);
-        fullYearOption.setWidth("96em");
-    
+        fullYearOption.setMinWidth("80em");
+        fullYearOption.setMaxWidth("100%");
+        
         add(fullYearOption);
     }
     

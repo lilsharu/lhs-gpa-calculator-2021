@@ -8,7 +8,6 @@ public class Course extends Class {
     
     public Course() {
         super();
-        grade = Grade.F;
     }
     
     public Course(boolean real) {
@@ -23,7 +22,6 @@ public class Course extends Class {
     
     public Course(Class aClass) {
         super(aClass);
-        grade = Grade.F;
     }
     
     public Course(String name, double credits, Level level, Department department, int classNumber, Grade grade) {
@@ -58,10 +56,5 @@ public class Course extends Class {
     
     public BigDecimal getMaxGPA() {
         return GPA.getGPA(Grade.A, getLevel()).calculateGPA();
-    }
-    
-    @Override
-    public String toString() {
-        return super.toString() + " Grade = " + grade + " Credits = " + super.getCredits();
     }
 }

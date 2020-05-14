@@ -15,6 +15,7 @@ public class Department {
     public static final Department TECHNOLOGY_DEPARTMENT      = new Department("Technology, Design, and Engineering");
     public static final Department VISUAL_ART_DEPARTMENT      = new Department("Visual Arts");
     public static final Department WORLD_LANGUAGE_DEPARTMENT  = new Department("World Language");
+    public static final Department ALL_DEPARTMENTS            = new Department("All");
     
     public static final List<Department> DEPARTMENT_LIST = getDepartments();
     

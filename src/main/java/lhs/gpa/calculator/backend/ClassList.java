@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static lhs.gpa.calculator.backend.Class.FULL_YEAR;
+import static lhs.gpa.calculator.backend.Class.HALF_YEAR;
+
 public class ClassList {
     
     private static List<Class> classList;
@@ -16,7 +19,6 @@ public class ClassList {
             BufferedReader read      = new BufferedReader(new InputStreamReader(classFileData));
             String         line;
             while ((line = read.readLine()) != null) {
-                System.out.println(line);
                 StringTokenizer st   = new StringTokenizer(line, "|");
                 String          name = st.nextToken();
                 if (name.contains("###"))
@@ -25,8 +27,12 @@ public class ClassList {
                 double     credits     = Double.parseDouble(st.nextToken());
                 Level      level       = Level.parseLevel(st.nextToken());
                 Department department  = Department.parseDepartment(st.nextToken());
+                String     length;
     
-                classList.add(new Class(name, credits, level, department, classNumber));
+                if (credits < 3) length = HALF_YEAR;
+                else length = FULL_YEAR;
+    
+                classList.add(new Class(name, credits, level, department, classNumber, length));
             }
     
             classList.sort(Comparator.comparing(Class::getName));

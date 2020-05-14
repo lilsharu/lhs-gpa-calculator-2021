@@ -30,10 +30,10 @@ public class LHSCalculator extends VerticalLayout {
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
     private final List<Department> departments          = Department.getDepartments();
     private final List<Grade>      gradeChoices         = Grade.gradeList();
-    private final HorizontalLayout fullYearOption       = new HorizontalLayout();
-    private final HorizontalLayout singleSemesterOption = new HorizontalLayout();
+    private final VerticalLayout   fullYearOption       = new VerticalLayout();
+    private final VerticalLayout   singleSemesterOption = new VerticalLayout();
     
-    List<Course> singleSemesterCourses = new ArrayList<>(10);
+    List<Course> courses = new ArrayList<>(10);
     
     public LHSCalculator() {
         departments.add(Department.ALL_DEPARTMENTS);
@@ -59,24 +59,27 @@ public class LHSCalculator extends VerticalLayout {
             //Do Nothing
         }
     
+        singleSemesterOption.removeAll();
+    
         FormLayout formLayout = new FormLayout();
         formLayout.setResponsiveSteps(
                 new ResponsiveStep("0", 1),
                 new ResponsiveStep("32em", 2),
                 new ResponsiveStep("40em", 3),
                 new ResponsiveStep("50em", 4),
-                new ResponsiveStep("60em", 5)
+                new ResponsiveStep("60em", 5),
+                new ResponsiveStep("70em", 6)
         );
     
         for (int i = 0; i < 10; i++) {
             Course current;
-            if (singleSemesterCourses.size() >= 10) {
-                current = singleSemesterCourses.get(i);
+            if (courses.size() > i) {
+                current = courses.get(i);
             } else {
                 current = new Course(false);
-                singleSemesterCourses.add(current);
+                courses.add(current);
             }
-        
+    
             ComboBox<Class> classChoices = new ComboBox<>("Class", classList);
             try {
                 classChoices.setValue(current.getaClass());
@@ -84,6 +87,7 @@ public class LHSCalculator extends VerticalLayout {
                 //Ignore it
             }
             ComboBox<Grade> gradeComboBox = new ComboBox<>("Grade", gradeChoices);
+            gradeComboBox.setEnabled(classChoices.getValue() != null);
             try {
                 gradeComboBox.setValue(current.getGrade());
             } catch (Exception e) {
@@ -91,6 +95,7 @@ public class LHSCalculator extends VerticalLayout {
             }
             classChoices.addValueChangeListener(onChange -> {
                 try {
+                    gradeComboBox.setEnabled(true);
                     current.setClass(onChange.getValue());
                     current.setReal(gradeComboBox.getValue() != null);
                 } catch (Exception e) {
@@ -109,20 +114,27 @@ public class LHSCalculator extends VerticalLayout {
                 if (onChange.getValue().equals(Department.ALL_DEPARTMENTS)) classChoices.setItems(classList);
                 else classChoices.setItems(ClassList.getClassList(classList, onChange.getValue()));
             });
-        
+    
             formLayout.add(departmentComboBox, 2);
-            formLayout.add(classChoices, 2);
+            formLayout.add(classChoices, 3);
             formLayout.add(gradeComboBox, 1);
         }
     
-        Button calculate        = createCalculateButton("Calculate", singleSemesterCourses, false);
-        Button calculateWithMax = createCalculateButton("Calculate (With Max)", singleSemesterCourses, true);
+        Button calculate        = createCalculateButton("Calculate", courses, false);
+        Button calculateWithMax = createCalculateButton("Calculate (With Max)", courses, true);
+        Button clearButton = new Button("Clear", buttonClickEvent -> {
+            courses = new ArrayList<>();
+            setSingleSemesterOption();
+        });
+        clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
     
-        HorizontalLayout buttonBar = new HorizontalLayout(calculate, calculateWithMax);
+        HorizontalLayout buttonBar = new HorizontalLayout(calculate, calculateWithMax, clearButton);
     
-        add(formLayout, buttonBar);
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setWidth("86em");
+        singleSemesterOption.add(formLayout, buttonBar);
+        singleSemesterOption.setJustifyContentMode(JustifyContentMode.CENTER);
+        singleSemesterOption.setWidth("86em");
+    
+        add(singleSemesterOption);
     }
     
     public void setFullYearOption() {
@@ -131,6 +143,104 @@ public class LHSCalculator extends VerticalLayout {
         } catch (Exception e) {
             //Do Nothing
         }
+    
+        fullYearOption.removeAll();
+    
+        FormLayout formLayout = new FormLayout();
+        formLayout.setResponsiveSteps(
+                new ResponsiveStep("0", 1),
+                new ResponsiveStep("32em", 2),
+                new ResponsiveStep("40em", 3),
+                new ResponsiveStep("50em", 4),
+                new ResponsiveStep("60em", 5),
+                new ResponsiveStep("70em", 6),
+                new ResponsiveStep("80em", 7),
+                new ResponsiveStep("94em", 8)
+        );
+    
+        for (int i = 0; i < 10; i++) {
+            Course current;
+            if (courses.size() > i) {
+                current = courses.get(i);
+            } else {
+                current = new Course(false);
+                courses.add(current);
+            }
+        
+            ComboBox<Class> classChoices = new ComboBox<>("Class", classList);
+            try {
+                classChoices.setValue(current.getaClass());
+            } catch (Exception e) {
+                //Ignore it
+            }
+        
+            ComboBox<Grade> firstSemester = new ComboBox<>("First Semester Grade", gradeChoices);
+            firstSemester.setEnabled(classChoices.getValue() != null);
+            try {
+                firstSemester.setValue(current.getGrade());
+            } catch (Exception e) {
+                //Ignore it
+            }
+        
+            ComboBox<Grade> secondSemester = new ComboBox<>("Second Semester Grade", gradeChoices);
+            secondSemester.setEnabled(classChoices.getValue() != null);
+        
+            ComboBox<Grade> finalsGrade = new ComboBox<>("Finals Grade", gradeChoices);
+            finalsGrade.setEnabled(classChoices.getValue() != null);
+        
+            classChoices.addValueChangeListener(onChange -> {
+                try {
+                    firstSemester.setEnabled(true);
+                    current.setClass(onChange.getValue());
+                    current.setReal(firstSemester.getValue() != null);
+                } catch (Exception e) {
+                    //Do Nothing
+                }
+            });
+        
+            firstSemester.addValueChangeListener(grade -> {
+                if (secondSemester.getValue() == null)
+                    current.setGrade(grade.getValue());
+                else
+                    current.setGrade(grade.getValue(), secondSemester.getValue(), finalsGrade.getValue());
+                current.setReal(classChoices.getValue() != null);
+                secondSemester.setEnabled(true);
+                finalsGrade.setEnabled(true);
+            });
+        
+            secondSemester.addValueChangeListener(grade -> current.setGrade(firstSemester.getValue(), grade.getValue(), finalsGrade.getValue()));
+        
+            finalsGrade.addValueChangeListener(grade -> current.setGrade(firstSemester.getValue(), secondSemester.getValue(), grade.getValue()));
+        
+            ComboBox<Department> departmentComboBox = new ComboBox<>("Department (For Sorting)", departments);
+            departmentComboBox.setValue(Department.ALL_DEPARTMENTS);
+            departmentComboBox.addValueChangeListener(onChange -> {
+                if (onChange.getValue().equals(Department.ALL_DEPARTMENTS)) classChoices.setItems(classList);
+                else classChoices.setItems(ClassList.getClassList(classList, onChange.getValue()));
+            });
+        
+            formLayout.add(departmentComboBox, 2);
+            formLayout.add(classChoices, 3);
+            formLayout.add(firstSemester, 1);
+            formLayout.add(secondSemester, 1);
+            formLayout.add(finalsGrade, 1);
+        }
+    
+        Button calculate        = createCalculateButton("Calculate", courses, false);
+        Button calculateWithMax = createCalculateButton("Calculate (With Max)", courses, true);
+        Button clearButton = new Button("Clear", buttonClickEvent -> {
+            courses = new ArrayList<>();
+            setFullYearOption();
+        });
+        clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+    
+        HorizontalLayout buttonBar = new HorizontalLayout(calculate, calculateWithMax, clearButton);
+    
+        fullYearOption.add(formLayout, buttonBar);
+        fullYearOption.setJustifyContentMode(JustifyContentMode.CENTER);
+        fullYearOption.setWidth("96em");
+    
+        add(fullYearOption);
     }
     
     public Button createCalculateButton(String buttonName, List<Course> courseListIn, boolean withMax) {

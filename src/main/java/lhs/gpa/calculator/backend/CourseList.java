@@ -20,9 +20,9 @@ public class CourseList {
     }
     
     public GPAValue getAllCourseGPA() {
-        BigDecimal credits = new BigDecimal(0);
-        BigDecimal gpaSum  = new BigDecimal(0);
-        
+        BigDecimal credits = BigDecimal.ZERO;
+        BigDecimal gpaSum  = BigDecimal.ZERO;
+    
         for (Course c : courseList) {
             if (c.isReal()) {
                 BigDecimal credit = BigDecimal.valueOf(c.getCredits());
@@ -37,9 +37,9 @@ public class CourseList {
     }
     
     public GPAValue getMaxAllCourseGPA() {
-        BigDecimal credits = new BigDecimal(0);
-        BigDecimal gpaSum  = new BigDecimal(0);
-        
+        BigDecimal credits = BigDecimal.ZERO;
+        BigDecimal gpaSum  = BigDecimal.ZERO;
+    
         for (Course c : courseList) {
             if (c.isReal()) {
                 BigDecimal credit = BigDecimal.valueOf(c.getCredits());
@@ -47,7 +47,7 @@ public class CourseList {
                 gpaSum  = gpaSum.add(credit.multiply(c.getMaxGPA()));
             }
         }
-        
+    
         return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
                                     .divide(credits, RoundingMode.HALF_UP)
                                     .divide(BigDecimal.valueOf(100)));
@@ -57,8 +57,8 @@ public class CourseList {
         List<Course> courseList = (List<Course>) ((ArrayList<Course>) this.courseList).clone();
         courseList.removeIf(course -> !course.isReal() || !course.isCore());
     
-        BigDecimal credits = new BigDecimal(0);
-        BigDecimal gpaSum  = new BigDecimal(0);
+        BigDecimal credits = BigDecimal.ZERO;
+        BigDecimal gpaSum  = BigDecimal.ZERO;
     
         //Makes sure no two classes are from the same department and not AP
         List<Department> departmentList = Department.getDepartments();
@@ -72,7 +72,7 @@ public class CourseList {
         
             if (courseDepartment.size() > 1) {
                 Course     maxCourse = new Course();
-                BigDecimal maxGPA    = new BigDecimal(0);
+                BigDecimal maxGPA    = BigDecimal.ZERO;
                 for (Course c : courseDepartment) {
                     if (c.getGPA().doubleValue() > maxGPA.doubleValue()) {
                         maxCourse = c;
@@ -104,8 +104,8 @@ public class CourseList {
         List<Course> courseList = (List<Course>) ((ArrayList<Course>) this.courseList).clone();
         courseList.removeIf(course -> !course.isReal() || !course.isCore());
     
-        BigDecimal credits = new BigDecimal(0);
-        BigDecimal gpaSum  = new BigDecimal(0);
+        BigDecimal credits = BigDecimal.ZERO;
+        BigDecimal gpaSum  = BigDecimal.ZERO;
     
         //Makes sure no two classes are from the same department and not AP
         List<Department> departmentList = Department.getDepartments();
@@ -119,7 +119,7 @@ public class CourseList {
         
             if (courseDepartment.size() > 1) {
                 Course     maxCourse = new Course();
-                BigDecimal maxGPA    = new BigDecimal(0);
+                BigDecimal maxGPA    = BigDecimal.ZERO;
                 for (Course c : courseDepartment) {
                     if (c.getMaxGPA().doubleValue() > maxGPA.doubleValue()) {
                         maxCourse = c;
@@ -148,9 +148,9 @@ public class CourseList {
     }
     
     public GPAValue getUnweightedGPA() {
-        BigDecimal credits = new BigDecimal(0);
-        BigDecimal gpaSum  = new BigDecimal(0);
-        
+        BigDecimal credits = BigDecimal.ZERO;
+        BigDecimal gpaSum  = BigDecimal.ZERO;
+    
         for (Course c : courseList) {
             if (c.isReal()) {
                 BigDecimal credit = BigDecimal.valueOf(c.getCredits());
@@ -158,7 +158,7 @@ public class CourseList {
                 gpaSum  = gpaSum.add(credit.multiply(c.getGrade().getGPAValue()));
             }
         }
-        
+    
         return new GPAValue(gpaSum.multiply(BigDecimal.valueOf(100))
                                     .divide(credits, RoundingMode.HALF_UP)
                                     .divide(BigDecimal.valueOf(100)));

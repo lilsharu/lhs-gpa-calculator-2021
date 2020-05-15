@@ -25,7 +25,7 @@ import java.util.*;
 @PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
      description = "Helps in the management of LHS Courses and helps calculate GPA")
 @PreserveOnRefresh
-public class LHSCalculator extends VerticalLayout {
+public class SingleYearLHSCalculator extends VerticalLayout {
     
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
     private final List<Grade>      gradeChoices         = Grade.gradeList();
@@ -34,7 +34,7 @@ public class LHSCalculator extends VerticalLayout {
     
     List<Course> courses = new ArrayList<>(10);
     
-    public LHSCalculator() {
+    public SingleYearLHSCalculator() {
         add(new H2("Single Year Calculator"));
         ComboBox<String> numSelect = new ComboBox<>();
         numSelect.setItems("Single Semester", "Full Year");

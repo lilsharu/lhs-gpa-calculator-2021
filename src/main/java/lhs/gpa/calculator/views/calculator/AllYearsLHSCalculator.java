@@ -12,7 +12,6 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
@@ -28,27 +27,26 @@ import java.util.*;
 @PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
      description = "Helps in the management of LHS Courses and helps calculate GPA")
 @PageTitle("All Years Calculator | GPA Genie")
-@PreserveOnRefresh
 @UIScope
 public class AllYearsLHSCalculator extends VerticalLayout {
     
     private final List<Class> classList    = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
     private final List<Grade> gradeChoices = Grade.gradeList();
     
-    private final VerticalLayout freshmanYear  = new VerticalLayout();
-    private final VerticalLayout sophomoreYear = new VerticalLayout();
-    private final VerticalLayout juniorYear    = new VerticalLayout();
-    private final VerticalLayout seniorYear    = new VerticalLayout();
+    private static final VerticalLayout freshmanYear  = new VerticalLayout();
+    private static final VerticalLayout sophomoreYear = new VerticalLayout();
+    private static final VerticalLayout juniorYear    = new VerticalLayout();
+    private static final VerticalLayout seniorYear    = new VerticalLayout();
     
-    private final List<Course> freshmanCourses  = new ArrayList<>();
-    private final List<Course> sophomoreCourses = new ArrayList<>();
-    private final List<Course> juniorCourses    = new ArrayList<>();
-    private final List<Course> seniorCourses    = new ArrayList<>();
+    private static final List<Course> freshmanCourses  = new ArrayList<>();
+    private static final List<Course> sophomoreCourses = new ArrayList<>();
+    private static final List<Course> juniorCourses    = new ArrayList<>();
+    private static final List<Course> seniorCourses    = new ArrayList<>();
     
-    private final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
-    private final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
+    private static final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
+    private static final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
     
-    private int currentCourseYearSelection = 0;
+    private static int currentCourseYearSelection = 0;
     
     public AllYearsLHSCalculator() {
         setUpYears();
@@ -163,7 +161,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout);
         }
         
-        add(freshmanYear);
+        add(layoutList.get(currentCourseYearSelection));
     }
     
     public HorizontalLayout getMoveButtonBar(int year) {

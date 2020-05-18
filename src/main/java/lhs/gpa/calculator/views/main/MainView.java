@@ -46,7 +46,7 @@ public class MainView extends AppLayout {
 
     private static Tab[] getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab("Multi-Year Calculator", AllYearsLHSCalculator.class));
+        tabs.add(createTab("Multi Year Calculator", AllYearsLHSCalculator.class));
         tabs.add(createTab("Single Year Calculator", SingleYearLHSCalculator.class));
         tabs.add(createTab("Generic GPA Calculator", GenericGPACalculator.class));
 //        tabs.add(createTab("Dashboard", DashboardView.class));

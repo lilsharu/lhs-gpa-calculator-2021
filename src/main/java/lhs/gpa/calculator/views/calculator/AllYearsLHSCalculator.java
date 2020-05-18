@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
@@ -29,6 +30,7 @@ import java.util.*;
      description = "Helps in the management of LHS Courses and helps calculate GPA")
 @PageTitle("All Years Calculator | GPA Genie")
 @UIScope
+@PreserveOnRefresh
 public class AllYearsLHSCalculator extends VerticalLayout {
     
     private final List<Class> classList    = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
@@ -211,7 +213,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             
             VerticalLayout GPAInfo = new VerticalLayout();
             
-            MultiYearCourseList courseList = new MultiYearCourseList(this.courseList);
+            MultiYearCourseList courseList = new MultiYearCourseList(AllYearsLHSCalculator.courseList);
             GPAValue   gpaAll     = courseList.getAllCourseGPA();
             GPAValue   gpaAllMax  = courseList.getMaxAllCourseGPA();
             GPAValue   gpaCore    = courseList.getCoreGPA();

@@ -3,7 +3,10 @@ package lhs.gpa.calculator.backend;
 import java.math.BigDecimal;
 
 public class Course extends Class {
-    private Grade   grade;
+    private Grade mainGrade;
+    private Grade firstSemester;
+    private Grade secondSemester;
+    private Grade finals;
     private boolean real = true;
     
     public Course() {
@@ -17,7 +20,7 @@ public class Course extends Class {
     
     public Course(Class aClass, Grade grade) {
         super(aClass);
-        this.grade = grade;
+        this.mainGrade = grade;
     }
     
     public Course(Class aClass) {
@@ -26,26 +29,29 @@ public class Course extends Class {
     
     public Course(String name, double credits, Level level, Department department, int classNumber, Grade grade) {
         super(name, credits, level, department, classNumber);
-        this.grade = grade;
+        this.mainGrade = grade;
     }
     
     public Course(String name, double credits, Level level, Department department, int classNumber, String length, Grade grade) {
         super(name, credits, level, department, classNumber, length);
-        this.grade = grade;
+        this.mainGrade = grade;
     }
     
     public Grade getGrade() {
-        return grade;
+        return mainGrade;
     }
     
     public void setGrade(Grade grade) {
-        this.grade = grade;
+        this.mainGrade = grade;
     }
     
     public void setGrade(Grade firstSemester, Grade secondSemester, Grade finals) {
-        if (finals == null) {
-            setGradeNoFinals(firstSemester, secondSemester);
-        } else if (secondSemester == null) {
+        if (finals == null || finals.equals(Grade.NONE)) {
+            if (secondSemester == null || secondSemester.equals(Grade.NONE))
+                setGrade(firstSemester);
+            else
+                setGradeNoFinals(firstSemester, secondSemester);
+        } else if (secondSemester == null || secondSemester.equals(Grade.NONE)) {
             setGradeWithFinals(firstSemester, finals);
         } else {
             setGradeWithFinals(firstSemester, secondSemester, finals);
@@ -53,15 +59,15 @@ public class Course extends Class {
     }
     
     public void setGradeNoFinals(Grade firstSemester, Grade secondSemester) {
-        this.grade = Grade.averageNoFinals(firstSemester, secondSemester);
+        this.mainGrade = Grade.averageNoFinals(firstSemester, secondSemester);
     }
     
     public void setGradeWithFinals(Grade firstSemester, Grade finals) {
-        this.grade = Grade.averageWithFinals(firstSemester, finals);
+        this.mainGrade = Grade.averageWithFinals(firstSemester, finals);
     }
     
     public void setGradeWithFinals(Grade firstSemester, Grade secondSemester, Grade finals) {
-        this.grade = Grade.averageWithFinals(firstSemester, secondSemester, finals);
+        this.mainGrade = Grade.averageWithFinals(firstSemester, secondSemester, finals);
     }
     
     public boolean isReal() {
@@ -72,8 +78,35 @@ public class Course extends Class {
         this.real = real;
     }
     
+    public Grade getFirstSemester() {
+        return firstSemester;
+    }
+    
+    public void setFirstSemester(Grade firstSemester) {
+        this.firstSemester = firstSemester;
+        setGrade(firstSemester, secondSemester, finals);
+    }
+    
+    public Grade getSecondSemester() {
+        return secondSemester;
+    }
+    
+    public void setSecondSemester(Grade secondSemester) {
+        this.secondSemester = secondSemester;
+        setGrade(firstSemester, secondSemester, finals);
+    }
+    
+    public Grade getFinals() {
+        return finals;
+    }
+    
+    public void setFinals(Grade finals) {
+        this.finals = finals;
+        setGrade(firstSemester, secondSemester, finals);
+    }
+    
     public BigDecimal getGPA() {
-        return GPA.getGPA(grade, getLevel()).calculateGPA();
+        return GPA.getGPA(mainGrade, getLevel()).calculateGPA();
     }
     
     public BigDecimal getMaxGPA() {

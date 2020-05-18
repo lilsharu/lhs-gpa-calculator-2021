@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -110,10 +111,10 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                     //Ignore it
                 }
     
-                ComboBox<Grade> gradeValue = new ComboBox<>("Final Grade", gradeChoices);
+                TextField gradeValue = new TextField("Final Grade");
                 gradeValue.setEnabled(false);
                 try {
-                    gradeValue.setValue(current.getGrade());
+                    gradeValue.setValue(String.format("%s, %s", current.getGrade().toString(), current.getGPA().toString()));
                 } catch (Exception e) {
                     //Ignore it
                 }
@@ -130,17 +131,17 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                 firstSemester.addValueChangeListener(grade -> {
                     current.setFirstSemester(grade.getValue());
                     current.setReal(classChoices.getValue() != null);
-                    gradeValue.setValue(current.getGrade());
+                    gradeValue.setValue(String.format("%s, %s", current.getGrade().toString(), current.getGPA().toString()));
                 });
     
                 secondSemester.addValueChangeListener(grade -> {
                     current.setSecondSemester(grade.getValue());
-                    gradeValue.setValue(current.getGrade());
+                    gradeValue.setValue(String.format("%s, %s", current.getGrade().toString(), current.getGPA().toString()));
                 });
     
                 finalsGrade.addValueChangeListener(grade -> {
                     current.setFinals(grade.getValue());
-                    gradeValue.setValue(current.getGrade());
+                    gradeValue.setValue(String.format("%s, %s", current.getGrade().toString(), current.getGPA().toString()));
                 });
     
                 formLayout.add(classChoices, 3);

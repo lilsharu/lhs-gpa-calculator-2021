@@ -10,10 +10,10 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.spring.annotation.UIScope;
 import lhs.gpa.calculator.backend.Class;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
@@ -21,11 +21,10 @@ import lhs.gpa.calculator.views.main.MainView;
 import java.util.*;
 
 @Route(value = "lhs-calculator/single-year", layout = MainView.class)
-@RouteAlias(value = "", layout = MainView.class)
-@PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
-     description = "Helps in the management of LHS Courses and helps calculate GPA")
 @PreserveOnRefresh
-public class LHSCalculator extends VerticalLayout {
+@PageTitle("Single Year Calculator | GPA Genie")
+@UIScope
+public class SingleYearLHSCalculator extends VerticalLayout {
     
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
     private final List<Grade>      gradeChoices         = Grade.gradeList();
@@ -34,7 +33,7 @@ public class LHSCalculator extends VerticalLayout {
     
     List<Course> courses = new ArrayList<>(10);
     
-    public LHSCalculator() {
+    public SingleYearLHSCalculator() {
         add(new H2("Single Year Calculator"));
         ComboBox<String> numSelect = new ComboBox<>();
         numSelect.setItems("Single Semester", "Full Year");

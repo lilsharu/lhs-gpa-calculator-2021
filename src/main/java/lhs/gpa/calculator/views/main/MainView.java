@@ -12,8 +12,9 @@ import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import lhs.gpa.calculator.views.calculator.AllYearsLHSCalculator;
 import lhs.gpa.calculator.views.calculator.GenericGPACalculator;
-import lhs.gpa.calculator.views.calculator.LHSCalculator;
+import lhs.gpa.calculator.views.calculator.SingleYearLHSCalculator;
 
 import java.util.*;
 
@@ -45,7 +46,8 @@ public class MainView extends AppLayout {
 
     private static Tab[] getAvailableTabs() {
         final List<Tab> tabs = new ArrayList<>();
-        tabs.add(createTab("LHS GPA Calculator (Single Year)", LHSCalculator.class));
+        tabs.add(createTab("Multi-Year Calculator", AllYearsLHSCalculator.class));
+        tabs.add(createTab("Single Year Calculator", SingleYearLHSCalculator.class));
         tabs.add(createTab("Generic GPA Calculator", GenericGPACalculator.class));
 //        tabs.add(createTab("Dashboard", DashboardView.class));
         return tabs.toArray(new Tab[0]);

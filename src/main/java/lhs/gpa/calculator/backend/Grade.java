@@ -18,6 +18,7 @@ public class Grade {
     public static final Grade D       = new Grade("D");
     public static final Grade D_MINUS = new Grade("D-");
     public static final Grade F       = new Grade("F");
+    public static final Grade NONE = new Grade("None");
     
     private Grade(String grade) {
         this.grade = grade;
@@ -74,11 +75,11 @@ public class Grade {
     }
     
     public static List<Grade> gradeList() {
-        return new ArrayList<>(Arrays.asList(A, A_MINUS,
-                                             B_PLUS, B, B_MINUS,
-                                             C_PLUS, C, C_MINUS,
-                                             D_PLUS, D, D_MINUS,
-                                             F));
+        return Arrays.asList(A, A_MINUS,
+                             B_PLUS, B, B_MINUS,
+                             C_PLUS, C, C_MINUS,
+                             D_PLUS, D, D_MINUS,
+                             F, NONE            );
     }
     
     public static Grade averageNoFinals(Grade firstSemesterGrade, Grade secondSemesterGrade) {

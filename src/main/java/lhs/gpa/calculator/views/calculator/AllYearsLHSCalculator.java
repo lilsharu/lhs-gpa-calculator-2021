@@ -175,7 +175,6 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             removeAll();
             add(layoutList.get(--currentCourseYearSelection));
         });
-        leftButton.setAutofocus(true);
         
         Button rightButton = new Button(String.format("%s ❯", getYear(year + 1)));
         rightButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -184,7 +183,6 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             removeAll();
             add(layoutList.get(++currentCourseYearSelection));
         });
-        rightButton.setAutofocus(true);
         
         if (year == 3) {
             buttonBar.add(leftButton);
@@ -280,6 +278,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
         return calculate;
     }
     
+    @SuppressWarnings("CollectionAddedToSelf")
     public Button createClearButton() {
         Button clearButton = new Button("Clear", buttonClickEvent -> {
             freshmanCourses.removeAll(freshmanCourses);

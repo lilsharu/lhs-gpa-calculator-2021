@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -25,6 +26,7 @@ import java.util.*;
 @PWA(name = "LHS Course Profiler", shortName = "LHS GPA",
      description = "Helps in the management of LHS Courses and helps calculate GPA")
 @PreserveOnRefresh
+@PageTitle("Single Year Calculator | GPA Genie")
 public class SingleYearLHSCalculator extends VerticalLayout {
     
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));

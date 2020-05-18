@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
 import lhs.gpa.calculator.backend.Class;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
@@ -22,6 +23,7 @@ import java.util.*;
 @Route(value = "lhs-calculator/single-year", layout = MainView.class)
 @PreserveOnRefresh
 @PageTitle("Single Year Calculator | GPA Genie")
+@UIScope
 public class SingleYearLHSCalculator extends VerticalLayout {
     
     private final List<Class>      classList            = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));

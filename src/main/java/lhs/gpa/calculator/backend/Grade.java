@@ -120,4 +120,19 @@ public class Grade {
         else if (gpa >= 0.495) return D_MINUS;
         else return F;
     }
+    
+    public static Grade parseGrade(String gradeIn) {
+        if (gradeIn.equalsIgnoreCase("None")) return NONE;
+        
+        String grade = gradeIn.toUpperCase();
+        if (grade.length() > 2 || !(grade.contains("A") || grade.contains("B") || grade.contains("C") || grade.contains("D") || grade.contains("F")))
+            throw new IllegalArgumentException("The Grade passed in is not a valid grade");
+        
+        else if (grade.length() == 2 && !(grade.contains("+") || grade.contains("-")))
+            throw new IllegalArgumentException("The Grade passed in is not a valid grade");
+        
+        else {
+            return new Grade(grade);
+        }
+    }
 }

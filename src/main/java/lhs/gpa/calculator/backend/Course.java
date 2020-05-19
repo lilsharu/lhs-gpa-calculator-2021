@@ -112,4 +112,33 @@ public class Course extends Class {
     public BigDecimal getMaxGPA() {
         return GPA.getGPA(Grade.A, getLevel()).calculateGPA();
     }
+    
+    public String toStringExport() {
+        StringBuilder exportString = new StringBuilder(83);
+        exportString.append(super.getName())
+                .append("|")
+                .append(super.getClassNumber().toString())
+                .append("|")
+                .append(super.getCredits())
+                .append("|")
+                .append(super.getLevel().toString())
+                .append("|")
+                .append(super.getDepartment().toStringExport())
+                .append("|");
+        
+        if (firstSemester == null) exportString.append("None");
+        else exportString.append(firstSemester.toString());
+        
+        exportString.append("|");
+    
+        if (secondSemester == null) exportString.append("None");
+        else exportString.append(secondSemester.toString());
+    
+        exportString.append("|");
+    
+        if (finals == null) exportString.append("None");
+        else exportString.append(finals.toString());
+    
+        return exportString.toString();
+    }
 }

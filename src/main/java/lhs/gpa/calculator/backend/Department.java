@@ -83,6 +83,33 @@ public class Department {
         return department;
     }
     
+    public String toStringExport() {
+        if (BUSINESS_DEPARTMENT.equals(this)) {
+            return "BUSINESS_DEPARTMENT";
+        } else if (ENGLISH_DEPARTMENT.equals(this)) {
+            return "ENGLISH_DEPARTMENT";
+        } else if (FCS_DEPARTMENT.equals(this)) {
+            return "FCS_DEPARTMENT";
+        } else if (MATH_DEPARTMENT.equals(this)) {
+            return "MATH_DEPARTMENT";
+        } else if (PE_DEPARTMENT.equals(this)) {
+            return "PE_DEPARTMENT";
+        } else if (PERFORMING_ARTS_DEPARTMENT.equals(this)) {
+            return "PERFORMING_ARTS_DEPARTMENT";
+        } else if (SCIENCE_DEPARTMENT.equals(this)) {
+            return "SCIENCE_DEPARTMENT";
+        } else if (SOCIAL_STUDIES_DEPARTMENT.equals(this)) {
+            return "SOCIAL_STUDIES_DEPARTMENT";
+        } else if (TECHNOLOGY_DEPARTMENT.equals(this)) {
+            return "TECHNOLOGY_DEPARTMENT";
+        } else if (VISUAL_ART_DEPARTMENT.equals(this)) {
+            return "VISUAL_ART_DEPARTMENT";
+        } else if (WORLD_LANGUAGE_DEPARTMENT.equals(this)) {
+            return "WORLD_LANGUAGE_DEPARTMENT";
+        }
+        throw new IllegalArgumentException(department + " does not match any of the known departments");
+    }
+    
     public static List<Department> getDepartments() {
         return new ArrayList<>(Arrays.asList(
                 BUSINESS_DEPARTMENT,

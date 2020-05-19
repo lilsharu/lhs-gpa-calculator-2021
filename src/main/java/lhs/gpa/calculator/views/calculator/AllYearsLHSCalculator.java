@@ -91,6 +91,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                 } catch (Exception e) {
                     //Ignore it
                 }
+                classChoices.setClearButtonVisible(true);
     
                 ComboBox<Grade> firstSemester = new ComboBox<>("First Semester", gradeChoices);
                 try {
@@ -114,7 +115,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                 }
     
                 TextField gradeValue = new TextField("Final Grade");
-                gradeValue.setEnabled(false);
+                gradeValue.setReadOnly(true);
                 try {
                     gradeValue.setValue(String.format("%s, %s", current.getGrade().toString(), current.getGPA().toString()));
                 } catch (Exception e) {

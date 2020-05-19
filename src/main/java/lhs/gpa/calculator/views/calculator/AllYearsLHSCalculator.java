@@ -213,7 +213,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             
             VerticalLayout GPAInfo = new VerticalLayout();
             
-            MultiYearCourseList courseList = new MultiYearCourseList(AllYearsLHSCalculator.courseList);
+            MultiYearCourseList courseList = new MultiYearCourseList(this.courseList);
             GPAValue   gpaAll     = courseList.getAllCourseGPA();
             GPAValue   gpaAllMax  = courseList.getMaxAllCourseGPA();
             GPAValue   gpaCore    = courseList.getCoreGPA();

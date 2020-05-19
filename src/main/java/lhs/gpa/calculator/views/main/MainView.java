@@ -2,12 +2,16 @@ package lhs.gpa.calculator.views.main;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
+import com.vaadin.flow.dom.ThemeList;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
@@ -49,7 +53,22 @@ public class MainView extends AppLayout {
         tabs.add(createTab("Multi Year Calculator", AllYearsLHSCalculator.class));
         tabs.add(createTab("Single Year Calculator", SingleYearLHSCalculator.class));
         tabs.add(createTab("Generic GPA Calculator", GenericGPACalculator.class));
-//        tabs.add(createTab("Dashboard", DashboardView.class));
+        tabs.add(new Tab(new Hr()));
+        Button toggleButton = new Button("Dark Mode");
+        
+        toggleButton.addClickListener(click -> {
+            ThemeList themeList = UI.getCurrent().getElement().getThemeList();
+        
+            if (themeList.contains(Lumo.DARK)) {
+                themeList.remove(Lumo.DARK);
+                toggleButton.setText("Dark Mode");
+            } else {
+                themeList.add(Lumo.DARK);
+                toggleButton.setText("Light Mode");
+            }
+            
+        });
+        tabs.add(new Tab(toggleButton));
         return tabs.toArray(new Tab[0]);
     }
 

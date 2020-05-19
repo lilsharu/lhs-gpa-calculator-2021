@@ -36,20 +36,20 @@ public class AllYearsLHSCalculator extends VerticalLayout {
     private final List<Class> classList    = ClassList.getClassList(this.getClass().getResourceAsStream("/data/class-list.classes"));
     private final List<Grade> gradeChoices = Grade.gradeList();
     
-    private static final VerticalLayout freshmanYear  = new VerticalLayout();
-    private static final VerticalLayout sophomoreYear = new VerticalLayout();
-    private static final VerticalLayout juniorYear    = new VerticalLayout();
-    private static final VerticalLayout seniorYear    = new VerticalLayout();
+    private final VerticalLayout freshmanYear  = new VerticalLayout();
+    private final VerticalLayout sophomoreYear = new VerticalLayout();
+    private final VerticalLayout juniorYear    = new VerticalLayout();
+    private final VerticalLayout seniorYear    = new VerticalLayout();
     
-    private static final List<Course> freshmanCourses  = new ArrayList<>();
-    private static final List<Course> sophomoreCourses = new ArrayList<>();
-    private static final List<Course> juniorCourses    = new ArrayList<>();
-    private static final List<Course> seniorCourses    = new ArrayList<>();
+    private final List<Course> freshmanCourses  = new ArrayList<>();
+    private final List<Course> sophomoreCourses = new ArrayList<>();
+    private final List<Course> juniorCourses    = new ArrayList<>();
+    private final List<Course> seniorCourses    = new ArrayList<>();
     
-    private static final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
-    private static final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
+    private final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
+    private final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
     
-    private static int currentCourseYearSelection = 0;
+    private int currentCourseYearSelection = 0;
     
     public AllYearsLHSCalculator() {
         setUpYears();
@@ -164,7 +164,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout);
         }
         
-        add(layoutList.get(currentCourseYearSelection));
+        add(freshmanYear);
     }
     
     public HorizontalLayout getMoveButtonBar(int year) {

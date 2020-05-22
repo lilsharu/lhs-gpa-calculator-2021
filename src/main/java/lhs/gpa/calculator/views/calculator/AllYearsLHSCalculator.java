@@ -280,13 +280,12 @@ public class AllYearsLHSCalculator extends VerticalLayout {
         return calculate;
     }
     
-    @SuppressWarnings("CollectionAddedToSelf")
     public Button createClearButton() {
         Button clearButton = new Button("Clear", buttonClickEvent -> {
-            freshmanCourses.removeAll(freshmanCourses);
-            sophomoreCourses.removeAll(sophomoreCourses);
-            juniorCourses.removeAll(juniorCourses);
-            seniorCourses.removeAll(seniorCourses);
+            freshmanCourses.clear();
+            sophomoreCourses.clear();
+            juniorCourses.clear();
+            seniorCourses.clear();
             removeAll();
             setUpYears();
         });

@@ -6,8 +6,10 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,12 +19,18 @@ import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 import lhs.gpa.calculator.backend.Class;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
 
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Route(value = "lhs-calculator/all-years", layout = MainView.class)
 @RouteAlias(value = "", layout = MainView.class)
@@ -158,11 +166,12 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             Button calculateButton = createCalculateButton("Calculate", false);
             Button calculateWithMaxButton = createCalculateButton("Calculate (With Max)", true);
             Button clearButton = createClearButton();
+            Anchor saveButton = saveButton();
     
             HorizontalLayout layout = new HorizontalLayout(calculateButton, calculateWithMaxButton, clearButton);
 
-            v.add(getMoveButtonBar(i), layout);
-            v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout);
+            v.add(getMoveButtonBar(i), layout, saveButton);
+            v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout, saveButton);
         }
         
         add(freshmanYear);
@@ -294,6 +303,42 @@ public class AllYearsLHSCalculator extends VerticalLayout {
         clearButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         
         return clearButton;
+    }
+    
+    public Anchor saveButton() {
+        Anchor anchor = new Anchor(new StreamResource("gpa-calc-data.user", this::makeInputStreamOfContent), "");
+        anchor.getElement().setAttribute("download", true);
+        
+        Button saveButton = new Button("Save", VaadinIcon.DOWNLOAD_ALT.create());
+        saveButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        
+        anchor.add(saveButton);
+        
+        return anchor;
+    }
+    
+    private InputStream makeInputStreamOfContent() {
+        StringBuilder fileString = new StringBuilder();
+    
+        System.out.println(courseList);
+        
+        for (List<Course> courses : courseList) {
+            int number = 0;
+            StringBuilder courseString = new StringBuilder();
+            for (Course course : courses) {
+                if (course.isReal()) {
+                    number++;
+                    courseString.append(course.toStringExport()).append("\n");
+                    System.out.println("Appending");
+                }
+            }
+            fileString.append(number).append("\n");
+            fileString.append(courseString);
+        }
+    
+        System.out.println(fileString.toString());
+        
+        return new ByteArrayInputStream(fileString.toString().getBytes(StandardCharsets.UTF_8));
     }
     
     public String getYear(int year) {

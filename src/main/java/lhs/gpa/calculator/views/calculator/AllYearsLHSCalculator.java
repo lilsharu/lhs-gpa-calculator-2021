@@ -13,6 +13,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
@@ -174,7 +175,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             Button calculateButton = createCalculateButton("Calculate", false);
             Button calculateWithMaxButton = createCalculateButton("Calculate (With Max)", true);
             Button clearButton = createClearButton();
-            Anchor saveButton = saveButton();
+            Button saveButton = saveButton();
     
             HorizontalLayout layout = new HorizontalLayout(calculateButton, calculateWithMaxButton, clearButton);
 
@@ -320,20 +321,47 @@ public class AllYearsLHSCalculator extends VerticalLayout {
         return upload;
     }
     
-    public Anchor saveButton() {
-        Anchor anchor = new Anchor(new StreamResource("gpa-calc-data.user", this::makeInputStreamOfContent), "");
-        anchor.getElement().setAttribute("download", true);
-        
+    public Button saveButton() {
         Button saveButton = new Button("Save", VaadinIcon.DOWNLOAD_ALT.create());
-        saveButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        saveButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS, ButtonVariant.LUMO_PRIMARY);
         
-        anchor.add(saveButton);
+        saveButton.addClickListener(buttonClickEvent -> {
+            Notification getPassword = new Notification();
+            
+            PasswordField password = new PasswordField("Encryption Key");
+            password.setPlaceholder("Password");
+    
+            Anchor anchor = new Anchor(new StreamResource("gpa-calc-data.enc", () -> makeInputStreamOfContent(password.getValue())), "");
+            anchor.getElement().setAttribute("download", true);
+    
+            Button anchorButton = new Button("Export", VaadinIcon.DOWNLOAD_ALT.create());
+            anchorButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            anchorButton.addClickListener(onClick -> getPassword.close());
+    
+            anchor.add(anchorButton);
+            
+            Button cancelButton = new Button("Cancel", onclick -> getPassword.close());
+            cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ERROR);
+            
+            HorizontalLayout buttons = new HorizontalLayout(anchor, cancelButton);
+            buttons.setWidthFull();
+            buttons.setAlignSelf(Alignment.CENTER);
+            buttons.setAlignItems(Alignment.CENTER);
+            
+            VerticalLayout passwordCase = new VerticalLayout(password, buttons);
+            passwordCase.setAlignItems(Alignment.CENTER);
+            passwordCase.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+            passwordCase.setWidthFull();
+            
+            getPassword.add(passwordCase);
+            getPassword.setPosition(Notification.Position.MIDDLE);
+            getPassword.open();
+        });
         
-        return anchor;
+        return saveButton;
     }
     
-    private InputStream makeInputStreamOfContent() {
-        String password = "Pass";
+    private InputStream makeInputStreamOfContent(String password) {
         StringBuilder fileString = new StringBuilder();
         
         for (List<Course> courses : courseList) {

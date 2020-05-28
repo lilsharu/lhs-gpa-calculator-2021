@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.time.LocalDate;
 
 public class CryptoUtils {
     public static OutputStream encryptFile(InputStream toEncrypt, String password)
@@ -30,7 +29,7 @@ public class CryptoUtils {
         srandom.nextBytes(iv);
         IvParameterSpec ivspec = new IvParameterSpec(iv);
     
-        FileOutputStream out = new FileOutputStream("student_gpa_data_" + LocalDate.now() + ".enc");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         out.write(salt);
         out.write(iv);
     
@@ -68,7 +67,7 @@ public class CryptoUtils {
             processFile(ci, toDecrypt, out);
         }
         catch (Exception e) {
-            System.err.println("File Processing Failed");
+            System.err.println("File Decryption Failed");
             throw e;
         }
         

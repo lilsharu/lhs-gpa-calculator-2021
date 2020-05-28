@@ -14,6 +14,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
@@ -25,9 +27,15 @@ import lhs.gpa.calculator.backend.Class;
 import lhs.gpa.calculator.backend.*;
 import lhs.gpa.calculator.views.main.MainView;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -305,6 +313,13 @@ public class AllYearsLHSCalculator extends VerticalLayout {
         return clearButton;
     }
     
+    public Upload uploadField() {
+        MemoryBuffer buffer = new MemoryBuffer();
+        Upload upload = new Upload(buffer);
+        
+        return upload;
+    }
+    
     public Anchor saveButton() {
         Anchor anchor = new Anchor(new StreamResource("gpa-calc-data.user", this::makeInputStreamOfContent), "");
         anchor.getElement().setAttribute("download", true);
@@ -318,9 +333,8 @@ public class AllYearsLHSCalculator extends VerticalLayout {
     }
     
     private InputStream makeInputStreamOfContent() {
+        String password = "Pass";
         StringBuilder fileString = new StringBuilder();
-    
-        System.out.println(courseList);
         
         for (List<Course> courses : courseList) {
             int number = 0;
@@ -335,10 +349,23 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             fileString.append(number).append("\n");
             fileString.append(courseString);
         }
-    
+        
         System.out.println(fileString.toString());
         
-        return new ByteArrayInputStream(fileString.toString().getBytes(StandardCharsets.UTF_8));
+        InputStream in = new ByteArrayInputStream(fileString.toString().getBytes(StandardCharsets.UTF_8));
+        OutputStream out = null;
+        
+        InputStream toReturn = null;
+        try {
+            out = CryptoUtils.encryptFile(in, password);
+            toReturn = new ByteArrayInputStream(((ByteArrayOutputStream) out).toByteArray());
+            System.out.println(toReturn.toString());
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException | InvalidAlgorithmParameterException |
+                InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        
+        return toReturn;
     }
     
     public String getYear(int year) {

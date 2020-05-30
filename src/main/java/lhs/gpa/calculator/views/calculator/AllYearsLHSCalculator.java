@@ -58,12 +58,12 @@ public class AllYearsLHSCalculator extends VerticalLayout {
     private final VerticalLayout juniorYear    = new VerticalLayout();
     private final VerticalLayout seniorYear    = new VerticalLayout();
     
-    private final List<Course> freshmanCourses  = new ArrayList<>();
-    private final List<Course> sophomoreCourses = new ArrayList<>();
-    private final List<Course> juniorCourses    = new ArrayList<>();
-    private final List<Course> seniorCourses    = new ArrayList<>();
+    private static final List<Course> freshmanCourses  = new ArrayList<>();
+    private static final List<Course> sophomoreCourses = new ArrayList<>();
+    private static final List<Course> juniorCourses    = new ArrayList<>();
+    private static final List<Course> seniorCourses    = new ArrayList<>();
     
-    private final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
+    private static final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
     private final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
     
     private int currentCourseYearSelection = 0;

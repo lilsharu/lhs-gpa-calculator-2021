@@ -1,6 +1,7 @@
 package lhs.gpa.calculator.views.calculator;
 
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -9,8 +10,10 @@ import com.vaadin.flow.component.formlayout.FormLayout.ResponsiveStep;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -64,7 +67,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
     private static final List<Course> seniorCourses    = new ArrayList<>();
     
     private static final List<List<Course>>   courseList = Arrays.asList(freshmanCourses, sophomoreCourses, juniorCourses, seniorCourses);
-    private final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
+    private        final List<VerticalLayout> layoutList = Arrays.asList(freshmanYear, sophomoreYear, juniorYear, seniorYear            );
     
     private int currentCourseYearSelection = 0;
     
@@ -121,7 +124,7 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                 try {
                     secondSemester.setValue(current.getSecondSemester());
                 } catch (Exception e) {
-                    //Ignore it
+                    //Do Nothing
                 }
     
                 ComboBox<Grade> finalsGrade = new ComboBox<>("Finals (If Applicable)", gradeChoices);
@@ -176,11 +179,12 @@ public class AllYearsLHSCalculator extends VerticalLayout {
             Button calculateWithMaxButton = createCalculateButton("Calculate (With Max)", true);
             Button clearButton = createClearButton();
             Button saveButton = saveButton();
+            Upload upload = uploadField();
     
             HorizontalLayout layout = new HorizontalLayout(calculateButton, calculateWithMaxButton, clearButton);
 
-            v.add(getMoveButtonBar(i), layout, saveButton);
-            v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout, saveButton);
+            v.add(getMoveButtonBar(i), layout, saveButton, upload);
+            v.setHorizontalComponentAlignment(Alignment.CENTER, heading, buttonBar, layout, saveButton, upload);
         }
         
         add(freshmanYear);
@@ -316,9 +320,59 @@ public class AllYearsLHSCalculator extends VerticalLayout {
     
     public Upload uploadField() {
         MemoryBuffer buffer = new MemoryBuffer();
-        Upload upload = new Upload(buffer);
+        Upload uploadData = new Upload(buffer);
+        uploadData.setDropLabel(new Span("Upload Data"));
+    
+        uploadData.addSucceededListener(event -> {
+            Notification decrypt = new Notification();
+            PasswordField password = new PasswordField("Encryption Key");
+            password.setPlaceholder("Password");
+    
+            Button decryptButton = new Button("Decrypt", VaadinIcon.KEY.create());
+            decryptButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+            decryptButton.addClickListener(onClick -> {
+                try (InputStream decryptedFile = CryptoUtils.decryptFile(buffer.getInputStream(), password.getValue())) {
+                    CourseList.setContent(courseList, decryptedFile);
+                    setUpYears();
+                } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidAlgorithmParameterException
+                        | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    Notification fail = new Notification();
+                    fail.setText("Incorrect Password");
+                    fail.setDuration(5000);
+                    fail.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    fail.open();
+                }
+                finally {
+                    decrypt.close();
+                }
+            });
+            
+            decryptButton.addClickShortcut(Key.ENTER);
+            decryptButton.addClickShortcut(Key.NUMPAD_ENTER);
+    
+            Button cancelButton = new Button("Cancel", onclick -> {
+                decrypt.close();
+            });
+            cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ERROR);
+    
+            HorizontalLayout buttons = new HorizontalLayout(decryptButton, cancelButton);
+            buttons.setWidthFull();
+            buttons.setAlignSelf(Alignment.CENTER);
+            buttons.setAlignItems(Alignment.CENTER);
+    
+            VerticalLayout passwordCase = new VerticalLayout(password, buttons);
+            passwordCase.setAlignItems(Alignment.CENTER);
+            passwordCase.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+            passwordCase.setWidthFull();
+    
+            decrypt.add(passwordCase);
+            decrypt.setPosition(Notification.Position.MIDDLE);
+            decrypt.open();
+        });
         
-        return upload;
+        return uploadData;
     }
     
     public Button saveButton() {

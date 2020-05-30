@@ -1,6 +1,7 @@
 package lhs.gpa.calculator.backend;
 
 import java.math.BigDecimal;
+import java.util.StringTokenizer;
 
 public class Course extends Class {
     private Grade mainGrade;
@@ -47,14 +48,23 @@ public class Course extends Class {
     
     public void setGrade(Grade firstSemester, Grade secondSemester, Grade finals) {
         if (finals == null || finals.equals(Grade.NONE)) {
-            if (secondSemester == null || secondSemester.equals(Grade.NONE))
+            this.firstSemester = firstSemester;
+            if (secondSemester == null || secondSemester.equals(Grade.NONE)) {
                 setGrade(firstSemester);
-            else
+            }
+            else {
                 setGradeNoFinals(firstSemester, secondSemester);
+                this.secondSemester = secondSemester;
+            }
         } else if (secondSemester == null || secondSemester.equals(Grade.NONE)) {
             setGradeWithFinals(firstSemester, finals);
+            this.firstSemester = firstSemester;
+            this.finals = finals;
         } else {
             setGradeWithFinals(firstSemester, secondSemester, finals);
+            this.firstSemester = firstSemester;
+            this.secondSemester = secondSemester;
+            this.finals = finals;
         }
     }
     
@@ -140,5 +150,25 @@ public class Course extends Class {
         else exportString.append(finals.toString());
     
         return exportString.toString();
+    }
+    
+    public static Course parseCourse(String courseToParse) {
+        try {
+            Course course = new Course();
+    
+            StringTokenizer st = new StringTokenizer(courseToParse, "|");
+    
+            course.setName(st.nextToken());
+            course.setClassNumber(new ClassNumber(st.nextToken()));
+            course.setCredits(Double.parseDouble(st.nextToken()));
+            course.setLevel(Level.parseLevel(st.nextToken()));
+            course.setDepartment(Department.parseDepartment(st.nextToken()));
+            course.setGrade(Grade.parseGrade(st.nextToken()), Grade.parseGrade(st.nextToken()), Grade.parseGrade(st.nextToken()));
+    
+            return course;
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Parsing Course Failed", e);
+        }
     }
 }

@@ -1,5 +1,9 @@
 package lhs.gpa.calculator.backend;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -13,6 +17,16 @@ public class CourseList {
     
     public CourseList(Course... courses) {
         this.courseList = new ArrayList<>(Arrays.asList(courses));
+    }
+    
+    public static void setContent(List<List<Course>> courseList, InputStream decryptedFile) throws IOException {
+        BufferedReader read = new BufferedReader(new InputStreamReader(decryptedFile));
+        for (List<Course> courses : courseList) {
+            int num = Integer.parseInt(read.readLine());
+            for (int i = 0; i < num; i++) {
+                courses.set(i, Course.parseCourse(read.readLine()));
+            }
+        }
     }
     
     public void addCourse(Course... courses) {

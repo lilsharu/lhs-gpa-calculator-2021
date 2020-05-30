@@ -45,6 +45,9 @@ public class ClassNumber {
     
     @Override
     public String toString() {
-        return number + addition;
+        String num = Integer.toString(number);
+        while (num.length() < 3) num = "0" + num;
+        
+        return num + addition;
     }
 }

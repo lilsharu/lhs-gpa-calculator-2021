@@ -334,18 +334,15 @@ public class AllYearsLHSCalculator extends VerticalLayout {
                 try (InputStream decryptedFile = CryptoUtils.decryptFile(buffer.getInputStream(), password.getValue())) {
                     CourseList.setContent(courseList, decryptedFile);
                     setUpYears();
+                    decrypt.close();
                 } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidAlgorithmParameterException
-                        | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException e) {
+                        | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | IllegalArgumentException e) {
                     e.printStackTrace();
-                } catch (IllegalArgumentException e) {
                     Notification fail = new Notification();
                     fail.setText("Incorrect Password");
                     fail.setDuration(5000);
                     fail.addThemeVariants(NotificationVariant.LUMO_ERROR);
                     fail.open();
-                }
-                finally {
-                    decrypt.close();
                 }
             });
             

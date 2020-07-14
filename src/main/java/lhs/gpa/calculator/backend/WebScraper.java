@@ -1,44 +1,36 @@
 package lhs.gpa.calculator.backend;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.vaadin.flow.component.Html;
+import com.gargoylesoftware.htmlunit.html.*;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class WebScraper {
     public static void main(String[] args) {
-        String searchQuery = "iPhone 6s";
+        try (final WebClient webClient = new WebClient()) {
+            webClient.getOptions().setUseInsecureSSL(true);
+            //Gets the Login Page
+            final HtmlPage loginPage = webClient.getPage("https://students.livingston.org/livingston/sis/view?gohome=true");
 
-        WebClient client = new WebClient();
-        client.getOptions().setCssEnabled(false);
-        client.getOptions().setJavaScriptEnabled(false);
-        try {
-            String searchUrl = "https://newyork.craigslist.org/search/sss?sort=rel&query=" + URLEncoder.encode(searchQuery, StandardCharsets.UTF_8);
-            HtmlPage page = client.getPage(searchUrl);
+            //find the form that needs to be filled
+            final HtmlForm loginForm = loginPage.getFormByName("logon");
 
-            List<HtmlElement> items = page.getByXPath("//li[@class='result-row']");
-            if (items.isEmpty()) {
-                System.out.println("No Items Found!");
+            final HtmlSubmitInput button = loginForm.getFirstByXPath("//input[@class='saveButton']");
+            final HtmlEmailInput userName = loginForm.getInputByName("j_username");
+            final HtmlPasswordInput password = loginForm.getInputByName("j_password");
+
+            userName.type("shourya.bansal@lps-students.org");
+            password.type("Dished43");
+
+            final HtmlPage genesis = button.click();
+            for (int i = 0; i < 10; i++) {
+                System.out.println("Finally: " + genesis.getTitleText());
             }
-            else {
-                for (HtmlElement item : items) {
-                    HtmlAnchor itemAnchor = item.getFirstByXPath(".//p[@class='result-info']/a");
-                    HtmlElement spanPrice = item.getFirstByXPath(".//a/span[@class='result-price']");
 
-                    String itemName = itemAnchor.asText();
-                    String itemUrl = itemAnchor.getHrefAttribute();
+            HtmlTable generalGradeTable = (HtmlTable) genesis.getByXPath("/html/body//table[@role='main']").get(0);
+            assert generalGradeTable.getRowCount() == 2;
 
-                    String itemPrice = spanPrice == null ? "0.0" : spanPrice.asText();
-
-                    System.out.println(String.format("Name: %s Url: %s Price: %s", itemName, itemUrl, itemPrice));
-                }
-            }
+            HtmlTable gradeTable = (HtmlTable) generalGradeTable.getRows().get(2).getByXPath("/table[@class='list']");
         }
         catch (Exception e) {
             e.printStackTrace();

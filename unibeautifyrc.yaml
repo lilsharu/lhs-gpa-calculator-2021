@@ -1,0 +1,12 @@
+Java:
+  beautifiers:
+    - Pretty Diff
+  align_assignments: true
+  break_chained_methods: false
+  indent_comments: true
+  indent_size: 4
+  indent_style: space
+  max_preserve_newlines: 1
+  multiline_ternary: always
+  quotes: double
+  wrap_line_length: 80
